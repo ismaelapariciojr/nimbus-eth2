@@ -80,7 +80,7 @@ proc produceBlock(
                                         data: ForkedBeaconBlock.init(blck),
                                         blobsOpt: Opt.none(BlobList)))
   of ConsensusFork.Deneb:
-    let blck = produceBlockResponse.denebData.`block`
+    let blck = produceBlockResponse.denebData.blck
     let blobs = produceBlockResponse.denebData.blob_sidecars
     return Opt.some(PreparedBeaconBlock(blockRoot: hash_tree_root(blck),
                                         data: ForkedBeaconBlock.init(blck),

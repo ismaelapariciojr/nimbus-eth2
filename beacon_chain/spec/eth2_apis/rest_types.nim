@@ -333,7 +333,7 @@ type
     of ConsensusFork.Deneb:     denebBody*:     deneb.BeaconBlockBody
 
   DenebBlockContents* = object
-    `block`*: deneb.BeaconBlock
+    blck* {.serializedFieldName: "block".}: deneb.BeaconBlock
     blob_sidecars*: List[BlobSidecar, Limit MAX_BLOBS_PER_BLOCK]
 
   ProduceBlockResponseV2* = object
@@ -864,3 +864,27 @@ func init*(t: typedesc[RestSignedContributionAndProof],
     signature: signature)
 
 func len*(p: RestWithdrawalPrefix): int = sizeof(p)
+
+template withBlck*(x: ProduceBlockResponseV2,
+                   body: untyped): untyped =
+  case x.kind
+  of ConsensusFork.Phase0:
+    const consensusFork {.inject, used.} = ConsensusFork.Phase0
+    template blck: untyped {.inject.} = x.phase0Data
+    body
+  of ConsensusFork.Altair:
+    const consensusFork {.inject, used.} = ConsensusFork.Altair
+    template blck: untyped {.inject.} = x.altairData
+    body
+  of ConsensusFork.Bellatrix:
+    const consensusFork {.inject, used.} = ConsensusFork.Bellatrix
+    template blck: untyped {.inject.} = x.bellatrixData
+    body
+  of ConsensusFork.Capella:
+    const consensusFork {.inject, used.} = ConsensusFork.Capella
+    template blck: untyped {.inject.} = x.capellaData
+    body
+  of ConsensusFork.Deneb:
+    const consensusFork {.inject, used.} = ConsensusFork.Deneb
+    template blck: untyped {.inject.} = x.denebData.blck
+    body

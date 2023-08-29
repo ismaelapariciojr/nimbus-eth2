@@ -432,7 +432,7 @@ proc installValidatorApiHandlers*(router: var RestRouter, node: BeaconNode) =
               sidecars.add(sidecar)
 
             DenebBlockContents(
-              `block`: blck,
+              blck: blck,
               blob_sidecars: List[BlobSidecar,
                                   Limit MAX_BLOBS_PER_BLOCK].init(sidecars))
           elif blck is phase0.BeaconBlock or blck is altair.BeaconBlock or
